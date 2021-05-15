@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -63,6 +64,44 @@ class MainActivity : AppCompatActivity() {
         answerCount++ //正解数を入れるanswerCountに+1の意味
 
         if (answerCount == QUESTION_COUNT) { //問題が終わったかどうか
+            textView2.isVisible = false
+            textView.text = point.toString() + "点" //終わってたら点数表示
+            textView.setTextColor(Color.RED)
+
+            point = 0 //次回のために得点と解答数を初期化
+            answerCount = 0
+        } else {
+            textView.text = questions[answerCount].toString() + ""
+            textView.setTextColor(Color.BLACK)
+        }
+    }
+    fun batsu(v: View) {
+        var answer = true //boolean型
+        val number = questions[answerCount]
+
+        for (i in 2 until number) { //2以上number未満のi
+            if (number % i == 0) { //iで割り切れたら素数じゃない->true
+                answer = true
+                break //一度素数でないと判定したらその後調べる必要ない
+            }
+        }
+        if (answer) { //if answer==true
+            Toast.makeText(this,"正解", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this,"不正解", Toast.LENGTH_SHORT).show()
+        }
+
+        if (answer) {
+            point++ //+1の意味
+            Log.d("batsu","正解" + point.toString())
+        } else {
+            Log.d("batsu","不正解")
+        }
+
+        answerCount++ //正解数を入れるanswerCountに+1の意味
+
+        if (answerCount == QUESTION_COUNT) { //問題が終わったかどうか
+            textView2.isVisible = false
             textView.text = point.toString() + "点" //終わってたら点数表示
             textView.setTextColor(Color.RED)
 
